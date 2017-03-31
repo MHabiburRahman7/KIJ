@@ -138,7 +138,7 @@ def EXPANSI(E0):
 def XOR(Q, W):
     c = int(Q,2)^int(W,2)
     c = "{0:0b}".format(c)
-    print 'XOR: '+c
+#    print 'XOR: '+c
     return c
     
 def SBOX(A):    
@@ -169,16 +169,14 @@ def DES(itt, itt_plus):
     R.append(R0)
     C0, D0 = PC1()
     LEFT_ROT(C0, D0)
-    print 'C0:'+C0
-    print 'D0:'+D0
+#    print 'C0:'+C0
+#    print 'D0:'+D0
             
     for x in range(16):
         E = EXPANSI(R[x])
         #if x == 1 or x == 0:
         #    print E
         A = XOR(E,K[itt]).zfill(48)
-        if x == 0:
-            print A
         B = SBOX(A)
         PB = P_BOX(B)
         if x == 0:
@@ -195,7 +193,6 @@ def ENCRYPT(bin_iv):
     itt_plus = 1
 
     temp = bin_plaintext[i]
-#    bin_plaintext[i] = XOR(bin_plaintext[i],bin_iv).zfill(64)
     bin_plaintext[i] = bin_iv
 
 #    print dummy
@@ -217,7 +214,6 @@ def DECRYPT():
     
     dummy = XOR(dummy,IP_INV(R[16]+R[15])).zfill(64)
     text_decrypt.append(dummy)
-#    text_decrypt[i]= XOR(text_decrypt[i],bin_iv).zfill(64)
     
     return IP_INV(R[16]+R[15])    
     
@@ -226,10 +222,8 @@ def PADDING():
     
 if __name__ == '__main__':
     ip, pc1, pc2, expansi, sboxes, p_box, left_rotations, ip_inv=init()
-    mode='decrypt'
-#    mode = raw_input("encrypt/decrypt : ")
-    with open('hasil.txt', 'rb') as f:
-        data = f.read()
+#    mode='encrypt'
+    mode = raw_input("encrypt/decrypt : ")
 
     if mode == 'encrypt' or mode == 'ENCRYPT' :
         bin_plaintext = ''
@@ -239,13 +233,17 @@ if __name__ == '__main__':
         data = raw_input("");
         data = [data[i:i+8] for i in range(0, len(data), 8) ]
         bin_plaintext = [stringJadiBin(x) for x in data]
-        print bin_plaintext
+    #    print bin_plaintext
+
     elif mode == 'decrypt' or mode == 'DECRYPT' :
         bin_plaintext=''
+        with open('hasil.txt', 'rb') as f:
+            data = f.read()
+        
         data = [data[i:i+8] for i in range(0, len(data), 8) ]
         bin_plaintext = [stringJadiBin(x) for x in data]
     else:
-        print ValueError('Mode salah')
+        print ValueError('Hanya bisa encrypt atau decrypt')
 
     key = 'inikunci'      
     IV = '12345678'
@@ -269,16 +267,5 @@ if __name__ == '__main__':
             data = f.write(''.join(binJadiString(x) for x in chiper_encrypt))
     elif mode == 'decrypt' or mode == 'DECRYPT' :
         h = ''.join(binJadiString(x) for x in text_decrypt)
-#        valid = True
-#        if h[len(h)-1].isdigit():
-#            temp = int(h[len(h)-1])
-#        for x in range(len(h),len(h)-temp,-1):            
-#            if h[x-1].isdigit()==False or int(h[x-1]) != temp:
-#                valid = False
-#                break
-#        else:
-#            valid = False
-#        if valid == True:
-#            h = h[:len(h)-temp]
         
         print h
