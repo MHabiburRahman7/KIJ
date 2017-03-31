@@ -269,5 +269,16 @@ if __name__ == '__main__':
             data = f.write(''.join(binJadiString(x) for x in chiper_encrypt))
     elif mode == 'decrypt' or mode == 'DECRYPT' :
         h = ''.join(binJadiString(x) for x in text_decrypt)
+#        valid = True
+#        if h[len(h)-1].isdigit():
+#            temp = int(h[len(h)-1])
+#        for x in range(len(h),len(h)-temp,-1):            
+#            if h[x-1].isdigit()==False or int(h[x-1]) != temp:
+#                valid = False
+#                break
+#        else:
+#            valid = False
+#        if valid == True:
+#            h = h[:len(h)-temp]
         
         print h
