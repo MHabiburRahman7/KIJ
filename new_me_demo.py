@@ -1,3 +1,5 @@
+"Special thanks to: http://octarapribadi.blogspot.co.id/2012/10/contoh-enkripsi-dengan-algoritma-des.html"
+
 def init():
     ip = [58,50,42,34,26,18,10,2,
         60,52,44,36,28,20,12,4,
@@ -247,7 +249,7 @@ if __name__ == '__main__':
     else:
         print ValueError('Hanya bisa encrypt atau decrypt')
 
-    key = 'kunciyuk'      
+    key = 'kij12345'      
     IV = '12345678'
     bin_iv = stringJadiBin(IV)
     bin_key = stringJadiBin(key)      
