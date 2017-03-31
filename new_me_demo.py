@@ -134,13 +134,11 @@ def EXPANSI(E0):
     Exp = ''                    
     for x in range(len(expansi)):
         Exp += E0[expansi[x]-1]
-#    print 'Expansi: '+Eks
     return Exp
 
 def XOR(Q, W):
     c = int(Q,2)^int(W,2)
     c = "{0:0b}".format(c)
-#    print 'XOR: '+c
     return c
     
 def SBOX(A):    
@@ -171,13 +169,11 @@ def DES(itt, itt_plus):
     R.append(R0)
     C0, D0 = PC1()
     LEFT_ROT(C0, D0)
-#    print 'C0:'+C0
-#    print 'D0:'+D0
+
             
     for x in range(16):
         E = EXPANSI(R[x])
-        #if x == 1 or x == 0:
-        #    print E
+        
         A = XOR(E,K[itt]).zfill(48)
         B = SBOX(A)
         PB = P_BOX(B)
@@ -226,18 +222,15 @@ def PADDING():
     
 if __name__ == '__main__':
     ip, pc1, pc2, expansi, sboxes, p_box, left_rotations, ip_inv=init()
-#    mode='encrypt'
+
     mode = raw_input("encrypt/decrypt : ")
 
     if mode == 'encrypt' or mode == 'ENCRYPT' :
         bin_plaintext = ''
-#        temp = str(8-len(data)%8)
-#        for x in range(len(data)%8,8):
-#            data += str(temp)
+
         data = raw_input("");
         data = [data[i:i+8] for i in range(0, len(data), 8) ]
         bin_plaintext = [stringJadiBin(x) for x in data]
-    #    print bin_plaintext
 
     elif mode == 'decrypt' or mode == 'DECRYPT' :
         bin_plaintext=''
