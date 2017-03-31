@@ -193,27 +193,29 @@ def ENCRYPT(bin_iv):
     itt_plus = 1
 
     temp = bin_plaintext[i]
-    bin_plaintext[i] = bin_iv
+    bin_plaintext[i] = XOR(bin_plaintext[i], bin_iv).zfill(64)
+#    bin_plaintext[i] = bin_iv
 
-#    print dummy
+    #print 
     
     DES(itt, itt_plus)
     
-    temp = XOR(temp,IP_INV(R[16]+R[15])).zfill(64)
-    chiper_encrypt.append(temp)
+#    temp = XOR(temp,IP_INV(R[16]+R[15])).zfill(64)
+    chiper_encrypt.append(bin_plaintext[i])
+    #print 
     return IP_INV(R[16]+R[15])
     
-def DECRYPT():
-    iterasi = 0
-    iterasi_add = 1
+def DECRYPT(bin_iv):
+    itt = 0
+    itt_plus = 1
     
     dummy = bin_plaintext[i]
-    bin_plaintext[i] = bin_iv
+    #bin_plaintext[i] = bin_iv
 
-    DES(iterasi, iterasi_add)         
-    
-    dummy = XOR(dummy,IP_INV(R[16]+R[15])).zfill(64)
-    text_decrypt.append(dummy)
+    DES(itt, itt_plus)         
+
+    bin_plaintext[i] = XOR(bin_plaintext[i],bin_iv).zfill(64)    
+    text_decrypt.append(bin_plaintext[i])
     
     return IP_INV(R[16]+R[15])    
     
@@ -245,7 +247,7 @@ if __name__ == '__main__':
     else:
         print ValueError('Hanya bisa encrypt atau decrypt')
 
-    key = 'inikunci'      
+    key = 'kunciyuk'      
     IV = '12345678'
     bin_iv = stringJadiBin(IV)
     bin_key = stringJadiBin(key)      
@@ -258,7 +260,7 @@ if __name__ == '__main__':
         if mode == 'encrypt' or mode == 'ENCRYPT' :
             bin_iv = ENCRYPT(bin_iv)
         elif mode == 'decrypt' or mode == 'DECRYPT' :
-            bin_iv = DECRYPT()
+            bin_iv = DECRYPT(bin_iv)
             
     if mode == 'encrypt' or mode == 'ENCRYPT' :
         h = ''.join(binJadiString(x) for x in chiper_encrypt)
