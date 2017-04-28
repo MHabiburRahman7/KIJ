@@ -270,7 +270,7 @@ def start_des(messages, key, mode):
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server_address = ('localhost', 10010)
+server_address = ('localhost', 10560)
 
 sock.connect(server_address)
 #nama='mala'
