@@ -22,7 +22,7 @@ from RSA import *
 class Server:         
     def __init__(self): 
         self.host = ''
-        self.port = 50001
+        self.port = 10010
         self.backlog = 5 
         self.size = 1024 
         self.server = None 
