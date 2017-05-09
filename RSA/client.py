@@ -15,44 +15,50 @@ Entering a blank line will exit the client.
 import socket
 import sys
 import pickle
-from RSA import *
+import rsa_plain
+
+file1 = open("kuncipublik.txt", "r")
+file2 = open("kunciprivat.txt", "r")
 
 host = 'localhost'
-port = 50001
+port = 10210
 size = 1024
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((host,port))
-public_key, private_key = RSA()
-s.send(pickle.dumps(public_key))
-public_key_partner = pickle.loads(s.recv(size))
 
+print "connect to port: "+host,port
+
+temp = file1.read()
+public_key = temp.split(",")
+
+temp = file2.read()
+private_key = temp.split(",")
+ 
+#public_key, private_key = 
+#s.send(pickle.dumps(public_key))
+#public_key_partner = pickle.loads(s.recv(size))
 
 while 1:
     # read from keyboard
     print '>> ',
     data = sys.stdin.readline()
+    data = raw_input()
 
     if data== '\n':
         break
     
-    sign_data = sign(private_key, public_key_partner)
-    data = encrypt(public_key_partner, data)
+    #sign_data = sign(private_key, public_key_partner)
+    data_send = pickle.dumps(rsa_plain.encrypt(data, public_key))
+    s.sendall(data_send)
 #    print 'Decrypt : '+ str(data)
-    print 'public key : '+str(public_key_partner)
-    s.send(pickle.dumps(sign_data))
-    s.send(pickle.dumps(data))
+#    print 'public key : '+str(public_key_partner)
+#    s.send(pickle.dumps(sign_data))
+#    s.send(pickle.dumps(data))
 #    s.send('~~~')
 
     data = pickle.loads(s.recv(size))
     
-#    real_data =''
-#    real_data += data
-
-#    while real_data[len(real_data)-3:len(real_data)]!='~~~':
-#        data = s.recv(size)
-#        real_data += data
-        
-    real_data = decrypt(private_key,data)
+    real_data = rsa_plain.decrypt(data, private_key)
     print 'server : ' + real_data.strip()
     
 s.close()

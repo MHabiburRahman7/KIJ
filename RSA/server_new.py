@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue May 09 20:54:07 2017
+Created on Wed May 10 03:49:19 2017
 
 @author: MHR7
 """
-
-#!/usr/bin/env python 
 
 """ 
 An echo server that uses threads to handle multiple clients at a time. 
@@ -22,7 +20,7 @@ import rsa_plain
 class Server:         
     def __init__(self): 
         self.host = ''
-        self.port = 10190
+        self.port = 10210
         self.backlog = 5 
         self.size = 1024 
         self.server = None 
@@ -44,21 +42,11 @@ class Server:
         self.open_socket() 
         input = [self.server]
         running = 1 
+        
         while running: 
-            inputready,outputready,exceptready = select.select(input,[],[])
-
-            for s in inputready: 
-
-                if s == self.server: 
-                    # handle the server socket 
-                    c = Client(self.server.accept()) 
-                    c.start() 
-                    self.threads.append(c) 
-
-                elif s == sys.stdin: 
-                    # handle standard input 
- #                   junk = sys.stdin.readline() 
-                    running = 0 
+            c = Client(self.server.accept()) 
+            c.start() 
+            self.threads.append(c)
 
         # close all threads 
 
@@ -93,7 +81,7 @@ class Client(threading.Thread):
         while running:
             
             incoming = self.client.recv(self.size)
-            incoming_arr = pickle.load(incoming)
+            incoming_arr = pickle.loads(incoming)
             real_data = rsa_plain.decrypt(incoming_arr, self.private_key)
             print "client %s : %s" %(self.address, real_data.strip())
             
