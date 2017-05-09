@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Apr 28 10:42:10 2017
-
-@author: MHR7
-"""
-
 #python version: Python 3.5 for Windows
 import socket
 import sys
@@ -266,63 +259,48 @@ def start_des(messages, key, mode):
     
 """END OF DES"""
 
+# Alice (x, X)
+x = getrandbits(bits)
+X = pow(g, x, n)
+X2 = str(X)
+    
+# Bob (y, Y)
+y = getrandbits(bits)
+Y = pow(g, y, n)
+Y2 = str(Y)
 
+# Perbandingan hasil
+A = pow(Y, x, n)
+B = pow(X, y, n)
+A2= str(A)
+
+if(A == B):
+    print("Angka rahasia cocok: ", A2)
+        
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-<<<<<<< HEAD
-server_address = ('localhost', 10360)
-=======
-server_address = ('localhost', 10560)
->>>>>>> 3810216561893e13aea028f13b4e45324e0e7178
+server_address = ('localhost', 10250)
 
-sock.connect(server_address)
-#nama='mala'
-kunci = '12345678'
-
+soc
+        
 def terima_pesan():
     while True:
         data = sock.recv(1024)
         data = data.decode()
         if(data):
-            #print "panjang data masuk: ", len(data)
-            if(len(data)<=2):
-                data_int = int(data)
-                s = pow(data_int, perjanjian, prime)
-                global keys
-                keys = 0
-                keys = s
-                #print "Kunci: "+s;
-            
-            else:
-                data = start_des(data, kunci, "decrypt")
+            #print "ada data masuk"
+            data = start_des(data, kunci, "decrypt")
             #print data
-                print data   
+            print data   
         else:
 #            print "no more data"
             del data[:]
 
 start_new_thread(terima_pesan,())
 
-perjanjian = raw_input("masukkan angka random: ")
-perjanjian = int(perjanjian)
-
-prime = 23
-base = 5
-
-A = pow(base, perjanjian, prime)
-#print A
-A = str(A)
-print A
-sock.sendall(A.encode('utf-8'))
-
-kunci = str(keys)
-kunci = kunci.zfill(8)
-print "Kunci baru: "+kunci
-
 nama=raw_input("Masukan nama: ");
 #kunci = raw_input("masukkan kunci: ")
-
 try:
     
     while True:
