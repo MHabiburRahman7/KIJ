@@ -14,7 +14,11 @@ sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 print "starting server"
 
 #menerima koneksi dari semua interface
+<<<<<<< HEAD
+server_address=('127.0.0.1',10360)
+=======
 server_address=('localhost',10080)
+>>>>>>> 3810216561893e13aea028f13b4e45324e0e7178
 client_list=list()
 
 def send_to_all_klien(message):

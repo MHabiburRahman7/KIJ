@@ -1,21 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Apr 28 10:42:10 2017
+Created on Fri Apr 28 15:51:55 2017
 
 @author: MHR7
 """
 
-#python version: Python 3.5 for Windows
-import socket
-import sys
-from thread import start_new_thread
+"Special thanks to: http://octarapribadi.blogspot.co.id/2012/10/contoh-enkripsi-dengan-algoritma-des.html"
 
-chiper_encrypt = []
-text_decrypt = [] 
-
-"""DES ALL"""
-
-ip = [58,50,42,34,26,18,10,2,
+def init():
+    ip = [58,50,42,34,26,18,10,2,
         60,52,44,36,28,20,12,4,
         62,54,46,38,30,22,14,6,
         64,56,48,40,32,24,16,8,
@@ -24,7 +17,7 @@ ip = [58,50,42,34,26,18,10,2,
         61,53,45,37,29,21,13,5,
         63,55,47,39,31,23,15,7]
               
-pc1 = [57,49,41,33,25,17,9,
+    pc1 = [57,49,41,33,25,17,9,
          1,58,50,42,34,26,18,
          10,2,59,51,43,35,27,
          19,11,3,60,52,44,36,
@@ -33,7 +26,7 @@ pc1 = [57,49,41,33,25,17,9,
          14,6,61,53,45,37,29,
          21,13,5,28,20,12,4]
          
-pc2 = [14,17,11,24,1,5,
+    pc2 = [14,17,11,24,1,5,
          3,28,15,6,21,10,
          23,19,12,4,26,8,
          16,7,27,20,13,2,
@@ -42,7 +35,7 @@ pc2 = [14,17,11,24,1,5,
          44,49,39,56,34,53,
          46,42,50,36,29,32]
          
-expansi = [32,1,2,3,4,5,
+    expansi = [32,1,2,3,4,5,
        4,5,6,7,8,9,
        8,9,10,11,12,13,
        12,13,14,15,16,17,
@@ -51,7 +44,7 @@ expansi = [32,1,2,3,4,5,
        24,25,26,27,28,29,
        28,29,30,31,32,1]
        
-sboxes = { 
+    sbox = { 
      0: [[14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7],
             [0, 15, 7, 4, 14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8],
             [4, 1, 14, 8, 13, 6, 2, 11, 15, 12, 9, 7, 3, 10, 5, 0],
@@ -86,7 +79,7 @@ sboxes = {
              [2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11]]
      }
      
-p_box = [ 16, 7, 20, 21,
+    p_box = [ 16, 7, 20, 21,
       29, 12, 28, 17,
       1, 15, 23, 26,
       5, 18, 31, 10,
@@ -95,9 +88,9 @@ p_box = [ 16, 7, 20, 21,
       19, 13, 30, 6,
       22, 11, 4, 25 ]
       
-left_rotations = [1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1]
-   
-ip_inv = [40, 8, 48, 16, 56, 24, 64, 32,
+    left_rotations = [1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1]
+    
+    ip_inv = [40, 8, 48, 16, 56, 24, 64, 32,
           39, 7, 47, 15, 55, 23, 63, 31,
           38, 6, 46, 14, 54, 22, 62, 30,
           37, 5, 45, 13, 53, 21, 61, 29,
@@ -106,7 +99,7 @@ ip_inv = [40, 8, 48, 16, 56, 24, 64, 32,
           34, 2, 42, 10, 50, 18, 58, 26,
           33, 1, 41, 9, 49, 17, 57, 25]
           
-#    return ip, pc1, pc2, expansi, sbox, p_box, left_rotations, ip_inv
+    return ip, pc1, pc2, expansi, sbox, p_box, left_rotations, ip_inv
     
 def binJadiString(b=None):
     return ''.join([chr(int(b[x:x+8], 2)) for x in range(0,len(b),8)])    
@@ -118,25 +111,19 @@ def hexJadiBin():
     "{0:0b}".format(int('5f',16))
     return None
     
-def IP(i, bin_plaintext):
-    temp_L0_R0 = ''
-    #another_temp = []
-    #print "plain_text yang ke[",i,"] adalah: "+ bin_plaintext
-    #print "panjang plain: ", len(bin_plaintext)
+def IP(i):
+    temp_L0_R0 = ''            
     for x in range(len(ip)):
-        #another_temp = bin_plaintext
-        #print "coba gini: "+ another_temp
-        temp_L0_R0 += bin_plaintext[ip[x]-1]
+        temp_L0_R0 += bin_plaintext[i][ip[x]-1]
     return temp_L0_R0[:len(ip)/2], temp_L0_R0[len(ip)/2:]
     
-def PC1(bin_key):  
+def PC1():  
     temp_E_F = ''
-   # print "panjang bin_key: ", len(bin_key)
     for x in range(len(pc1)):
         temp_E_F += bin_key[pc1[x]-1]
     return temp_E_F[:len(pc1)/2], temp_E_F[len(pc1)/2:]
   
-def LEFT_ROT(a,b,K):
+def LEFT_ROT(a,b):
     for x in left_rotations:
         a = a[x:]+a[:x]
         b = b[x:]+b[:x]    
@@ -159,7 +146,6 @@ def EXPANSI(E0):
 def XOR(Q, W):
     c = int(Q,2)^int(W,2)
     c = "{0:0b}".format(c)
-#    print 'XOR: '+c
     return c
     
 def SBOX(A):    
@@ -185,19 +171,16 @@ def IP_INV(X):
         chiper += X[ip_inv[x]-1]
     return chiper 
     
-def DES(itt, itt_plus, ia, K, R, bin_plaintext, bin_key):
-    #print "ia: "+ia
-#    pjg = len(bin_plaintext)
-    bin_plaintext[ia] = bin_plaintext[ia].zfill(64)
-#    tambahNul = 64 - pjg
-    
-    L0, R0 = IP(ia, bin_plaintext[ia])
+def DES(itt, itt_plus):
+    L0, R0 = IP(i)
     R.append(R0)
-    C0, D0 = PC1(bin_key)
-    LEFT_ROT(C0, D0, K)
+    C0, D0 = PC1()
+    LEFT_ROT(C0, D0)
+
             
     for x in range(16):
         E = EXPANSI(R[x])
+        
         A = XOR(E,K[itt]).zfill(48)
         B = SBOX(A)
         PB = P_BOX(B)
@@ -206,133 +189,87 @@ def DES(itt, itt_plus, ia, K, R, bin_plaintext, bin_key):
         else:
             R.append(XOR(R[x-1],PB).zfill(32))
 
+#        if x == 2:
+ #           print R
         itt += itt_plus
         
-def ENCRYPT(ia, K, R, bin_plaintext, bin_key):
+def ENCRYPT(bin_iv):
     itt = 0
     itt_plus = 1
+
+    temp = bin_plaintext[i]
+    bin_plaintext[i] = XOR(bin_plaintext[i], bin_iv).zfill(64)
+#    bin_plaintext[i] = bin_iv
+
+    #print 
     
-    DES(itt, itt_plus, ia, K, R, bin_plaintext, bin_key)
+    DES(itt, itt_plus)
     
-    chiper_encrypt.append(bin_plaintext[ia])
+#    temp = XOR(temp,IP_INV(R[16]+R[15])).zfill(64)
+    chiper_encrypt.append(bin_plaintext[i])
+    #print 
     return IP_INV(R[16]+R[15])
     
-def DECRYPT(ia, K, R, bin_plaintext, bin_key):
+def DECRYPT(bin_iv):
     itt = 0
     itt_plus = 1
- 
-    DES(itt, itt_plus, ia, K, R, bin_plaintext, bin_key)        
     
-    text_decrypt.append(bin_plaintext[ia])
+    dummy = bin_plaintext[i]
+    #bin_plaintext[i] = bin_iv
+
+    DES(itt, itt_plus)         
+
+    bin_plaintext[i] = XOR(bin_plaintext[i],bin_iv).zfill(64)    
+    text_decrypt.append(bin_plaintext[i])
     
     return IP_INV(R[16]+R[15])    
     
-def REMOVE_PAD(string):
-    return string.lstrip('0')
+def PADDING():
+    return None
     
-def start_des(messages, key, mode):
-    #ip, pc1, pc2, expansi, sboxes, p_box, left_rotations, ip_inv=init()
-    
-    bin_plaintext=''
-    data = messages
-    data = [data[i:i+8] for i in range(0, len(data), 8) ]
-   # print "mode sekarang: ",mode
-    bin_plaintext = [stringJadiBin(x) for x in data]
-    #print "isi plaintext: ",bin_plaintext
+if __name__ == '__main__':
+    ip, pc1, pc2, expansi, sboxes, p_box, left_rotations, ip_inv=init()
 
-    bin_key = stringJadiBin(key)
-    #pj = len(bin_plaintext)
-    #print "panjang bin_plain: ", pj
+    mode = 'encrypt'
     
-    for ia in range(len(bin_plaintext)):
+    if mode == 'encrypt' or mode == 'ENCRYPT' :
+        bin_plaintext = ''
+
+        data = str(0);
+        data = [data[i:i+8] for i in range(0, len(data), 8) ]
+        bin_plaintext = [stringJadiBin(x) for x in data]
+
+    elif mode == 'decrypt' or mode == 'DECRYPT' :
+        bin_plaintext=''
+        with open('hasil.txt', 'rb') as f:
+            data = f.read()
+        
+        data = [data[i:i+8] for i in range(0, len(data), 8) ]
+        bin_plaintext = [stringJadiBin(x) for x in data]
+    else:
+        print ValueError('Hanya bisa encrypt atau decrypt')
+
+    key = str(0)     
+    IV = '12345678'
+    bin_iv = stringJadiBin(IV)
+    bin_key = stringJadiBin(key)      
+    chiper_encrypt = []
+    text_decrypt = []    
+    
+    for i in range(len(bin_plaintext)):
         K = []
         R = []
         if mode == 'encrypt' or mode == 'ENCRYPT' :
-            result = ENCRYPT(ia, K, R, bin_plaintext, bin_key)
+            bin_iv = ENCRYPT(bin_iv)
         elif mode == 'decrypt' or mode == 'DECRYPT' :
-            result = DECRYPT(ia, K, R, bin_plaintext, bin_key)
+            bin_iv = DECRYPT(bin_iv)
             
-#    print "hasil result: ", ''.join(binJadiString(x) for x in result)
-    
-#    print "chiper_encrypt: ", ''.join(binJadiString(x) for x in chiper_encrypt)
     if mode == 'encrypt' or mode == 'ENCRYPT' :
-        final = ''.join(binJadiString(x) for x in chiper_encrypt)
-        
+        h = ''.join(binJadiString(x) for x in chiper_encrypt)
+        print h
+        with open('hasil.txt', 'wb') as f:
+            data = f.write(''.join(binJadiString(x) for x in chiper_encrypt))
     elif mode == 'decrypt' or mode == 'DECRYPT' :
-        final = ''.join(binJadiString(x) for x in text_decrypt)
+        h = ''.join(binJadiString(x) for x in text_decrypt)
         
-    return final
-    
-    
-"""END OF DES"""
-
-
-# Create a TCP/IP socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-<<<<<<< HEAD
-server_address = ('localhost', 10360)
-=======
-server_address = ('localhost', 10560)
->>>>>>> 3810216561893e13aea028f13b4e45324e0e7178
-
-sock.connect(server_address)
-#nama='mala'
-kunci = '12345678'
-
-def terima_pesan():
-    while True:
-        data = sock.recv(1024)
-        data = data.decode()
-        if(data):
-            #print "panjang data masuk: ", len(data)
-            if(len(data)<=2):
-                data_int = int(data)
-                s = pow(data_int, perjanjian, prime)
-                global keys
-                keys = 0
-                keys = s
-                #print "Kunci: "+s;
-            
-            else:
-                data = start_des(data, kunci, "decrypt")
-            #print data
-                print data   
-        else:
-#            print "no more data"
-            del data[:]
-
-start_new_thread(terima_pesan,())
-
-perjanjian = raw_input("masukkan angka random: ")
-perjanjian = int(perjanjian)
-
-prime = 23
-base = 5
-
-A = pow(base, perjanjian, prime)
-#print A
-A = str(A)
-print A
-sock.sendall(A.encode('utf-8'))
-
-kunci = str(keys)
-kunci = kunci.zfill(8)
-print "Kunci baru: "+kunci
-
-nama=raw_input("Masukan nama: ");
-#kunci = raw_input("masukkan kunci: ")
-
-try:
-    
-    while True:
-        message=raw_input()
-        kirim=nama+": "+message
-        encrypted = start_des(kirim, kunci, "encrypt")
-        #print "hasil enkripsi : "+encrypted
-        sock.sendall(encrypted.encode('utf-8'))  
-    
-finally:
-    
-    sock.close()
-
+        print h
