@@ -2,6 +2,7 @@
 import socket
 import sys
 from thread import start_new_thread
+from random import getrandbits
 
 chiper_encrypt = []
 text_decrypt = [] 
@@ -259,15 +260,21 @@ def start_des(messages, key, mode):
     
 """END OF DES"""
 
+bits = 8
+n = 122
+g = 12
+
 # Alice (x, X)
 x = getrandbits(bits)
 X = pow(g, x, n)
 X2 = str(X)
+print X2
     
 # Bob (y, Y)
 y = getrandbits(bits)
 Y = pow(g, y, n)
 Y2 = str(Y)
+print Y2
 
 # Perbandingan hasil
 A = pow(Y, x, n)
@@ -281,8 +288,6 @@ if(A == B):
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 server_address = ('localhost', 10250)
-
-soc
         
 def terima_pesan():
     while True:
@@ -297,18 +302,20 @@ def terima_pesan():
 #            print "no more data"
             del data[:]
 
-start_new_thread(terima_pesan,())
 
 nama=raw_input("Masukan nama: ");
-#kunci = raw_input("masukkan kunci: ")
+kunci = raw_input("masukkan kunci: ")
 try:
-    
+        
     while True:
         message=raw_input()
         kirim=nama+": "+message
         encrypted = start_des(kirim, kunci, "encrypt")
         #print "hasil enkripsi : "+encrypted
-        sock.sendall(encrypted.encode('utf-8'))  
+        sock.sendall(encrypted.encode('utf-8'))
+
+
+        yy
     
 finally:
     
