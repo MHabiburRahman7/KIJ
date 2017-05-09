@@ -36,6 +36,9 @@ if __name__ == "__main__":
     A2= str(A)
 
     if(A == B):
+        print X
+        print Y
+
         print("Angka rahasia cocok: ", A2)
  
 
@@ -47,6 +50,7 @@ def send_to_all_klien(A2):
         except:
             koneksi.close()
             client_list.remove(koneksi)
+
             
 def klien(koneksi):
     while True:
