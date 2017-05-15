@@ -1,10 +1,11 @@
 import random
+import math
 import numpy as np
 
 #n_e_d = []
 
 def primesfrom3to():
-    n=700
+    n=5000
     assert n>=2
     sieve = np.ones(n/2, dtype=np.bool)
     for i in xrange(3,int(n**0.5)+1,2):
@@ -17,6 +18,47 @@ def primesfrom3to():
         temp2 = np.random.randint(95,len(z))
     return z[temp], z[temp2]
 
+def prime_new(interval):
+    prime_list = []
+
+    for i in range(2, interval + 1):
+        for j in range(2, int(math.sqrt(i)) + 1):
+            if i % j == 0:
+                break
+        else:
+            prime_list.append(i)
+    
+    ada = len(prime_list)
+    p_num =np.random.randint(0, ada)
+    q_num =np.random.randint(0, ada)
+    while(p_num == q_num):
+        q_num =np.random.randint(0, ada)
+    
+    return prime_list[p_num], prime_list[q_num]
+
+def primeNr(interval):
+    prime_list = []
+    
+    for i in range(2, interval + 1):
+        for j in range(2, int(math.sqrt(i)) + 1):
+            if i % j == 0:
+                break
+        else:
+            prime_list.append(i)
+    
+    return prime_list
+"""
+def generate_p(batas_max):
+
+    # initialising primes
+    minPrime = 0
+    maxPrime = batas_max
+    cached_primes = [i for i in range(minPrime,maxPrime) if isPrime(i)]
+
+    n = random.choice([i for i in cached_primes if p<i<q])
+    
+    return n;
+"""
 
 def rand_p(batas_max):
     """    
@@ -72,17 +114,33 @@ def hitung_e(m):
             break
     #print "Nilai e: ",e
     return e
+    
+def egcd(a, b):
+    if a == 0:
+        return (b, 0, 1)
+    else:
+        g, y, x = egcd(b % a, a)
+        return (g, x - (b // a) * y, y)
+
+def hitung_d(a, m):
+    g, x, y = egcd(a, m)
+    if g != 1:
+        raise Exception('modular inverse does not exist')
+    else:
+        return x % m
+"""
 
 def hitung_d(m, e):
     d = 0
     # Mencari kunci privat (d) 
     for j in range(3, m, 2):
+        print "Nilai j",j
         if j * e % m == 1:
             d = j
             break
-    #print "Nilai d: ",e
+    print "Nilai d: ",d
     return d
-
+"""
 def cek_kunci(e, d, n):
     #print "Nilai d: ",d
     kunci_public = [e,n]
@@ -125,13 +183,14 @@ def encrypt(plaintext, public_key):
     l = [ord(c) for c in text]
     while i<len(plaintext):
         #l[i] = int(l[i])
-        int_pow = int(l[i])** int(e)
-        mod_pow = int_pow % int(n)
-        enkrip.append(int(mod_pow))  
+        temp = pow(int(l[i]), int(e), int(n))
+#        int_pow = int(l[i])** int(e)
+#        mod_pow = int_pow % int(n)
+        enkrip.append(int(temp))  
         #print enkrip[i]
         i+=1
     
-    enkripsi = ','.join(map(str,enkrip))
+    #enkripsi = ','.join(map(str,enkrip))
     #enk = list(enkripsi)
     #print enkripsi
     #print "Hasil enkripsi: "+enkripsi
@@ -139,43 +198,48 @@ def encrypt(plaintext, public_key):
     
 def decrypt(code, private_key):
     
-    #code = int(code)
     d, n = private_key
+    d = int(d)
+    n = int(n)
+    code = list(code)
+#    print type(code)
+#    code = code1
 #    d = n_e_d[2]
 #    n = n_e_d[0]
+
     dekrip = []
     i=0
-    #tampung = code.split(",")
-    #print tampung
-    """
+
     while i<len(code):
-        if(code[i]!=' '):
-            tampung.append(code[i])
-        
-        else:
-            continue
-        
-        i+=1
-    i=0
-    """
-    while i<len(code):
-        int_pow = int(code[i])** int(d)
-        mod_pow = int_pow % int(n)
-        dekrip.append(int(mod_pow))
-        #print dekrip[i]
+        int_code = int(code[i])
+        print "asli: ", int_code
+        temp = pow(int_code, d, n)
+#        int_pow = int(code[i])** int(d)
+#        mod_pow = int_pow % int(n)
+        dekrip.append(int(temp))
+        print dekrip[i]
         i+=1
         
 
     #print "selesai while"
     dekripsi = ''.join(chr(i) for i in dekrip)
-    #print "Hasil dekripsi: "+dekripsi
+    #print "Hasil dekripsi: ",dekrip
     return dekripsi
         
-#if __name__ == "__main__":
+def get_all():
+    p, q = primesfrom3to()
+    n = hitung_n(p,q)
+    m = hitung_m(p,q)
+    e = hitung_e(n)
+    d = hitung_d(m,e)
+    
+    return p, q, n, m, e, d
+    
+
 def init_rsa():
 #    k = 0
-    n_e_d = []
-    batas_max = 60
+#    n_e_d = []
+    batas_max = 300
    # prim = []
 #    enkrip = []
 #    dekrip = []
@@ -187,13 +251,13 @@ def init_rsa():
     print p," dan ",q
     
     n = hitung_n(p, q)
-    n_e_d.append(n)
+#    n_e_d.append(n)
     m = hitung_m(p, q)
     
     e = hitung_e(m)
-    n_e_d.append(e)
+#    n_e_d.append(e)
     d = hitung_d(m, e)
-    n_e_d.append(d)
+#    n_e_d.append(d)
     
     saving_key(e, d, n)
     cek_kunci(e, d, n)
@@ -225,24 +289,32 @@ def get_d():
 
 """
     
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+if __name__ == "__main__":
+    batasan = 1000
+    
+    #p, q = primesfrom3to()
+    p, q = prime_new(batasan)
+    #n = hitung_n(p,q)
+    n = p * q
+    #m = hitung_m(p,q)
+    m = (p-1)*(q-1)
+    e = hitung_e(n)
+    d = hitung_d(m,e)
+      
+    public_key = []
+    private_key = []
+    public_key.append(e)
+    public_key.append(n)
+    private_key.append(d)
+    private_key.append(n)
+    print "public key: ", public_key
+    print "private key: ", private_key
+    
+    plaintext = raw_input('plaintext : ')
+    
+    enkr = encrypt(plaintext, public_key)
+    dekr = decrypt(enkr, private_key)
+    
+    #print "Hasil enkripsi: ",enkr
+    print "Hasil dekripsi: ",dekr
+    
