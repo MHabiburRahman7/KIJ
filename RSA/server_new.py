@@ -9,6 +9,7 @@ Created on Wed May 10 03:49:19 2017
 An echo server that uses threads to handle multiple clients at a time. 
 Entering any line of input at the terminal will exit the server. 
 """ 
+# special thanks to: http://octarapribadi.blogspot.co.id/2016/02/enkripsi-dan-dekripsi-menggunakan-rsa.html
 
 import socket 
 import sys 
